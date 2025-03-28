@@ -13,9 +13,12 @@ public class Main {
     public static void main(String[] args) {
 
         SellerDao sellerDao = DaoFactory.createSellerDao();
-        Department dep = new Department(1, "Computers");
 
+        System.out.println("Find by Department: ");
+        Department dep = new Department(1, null);
         List<Seller> sellersList= sellerDao.findByDepartment(dep);
-        System.out.println(sellersList);
+        for(Seller seller: sellersList){
+            System.out.println(seller);
+        }
     }
 }
