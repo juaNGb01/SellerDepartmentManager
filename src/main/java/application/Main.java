@@ -7,15 +7,15 @@ import model.entities.Department;
 import model.entities.Seller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
 
-
-
         SellerDao sellerDao = DaoFactory.createSellerDao();
+        Department dep = new Department(1, "Computers");
 
-        Seller seller = sellerDao.findById(1);
-        System.out.println(seller);
+        List<Seller> sellersList= sellerDao.findByDepartment(dep);
+        System.out.println(sellersList);
     }
 }
