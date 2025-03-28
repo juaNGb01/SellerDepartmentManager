@@ -5,16 +5,11 @@ import model.dao.SellerDao;
 import model.entities.Department;
 import model.entities.Seller;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.sql.Date;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class SellerDaoJDBC implements SellerDao {
 
@@ -26,6 +21,33 @@ public class SellerDaoJDBC implements SellerDao {
 
     @Override
     public void insert(Seller seller) {
+        String sql =  "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) " +
+                "VALUES (DEFAULT, ? , ? , ?, ? , ?)";
+
+        try(PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
+            stmt.setString(1, seller.getName());
+            stmt.setString(2, seller.getEmail());
+            stmt.setDate(3, Date.valueOf(seller.getBirthDate()));
+            stmt.setDouble(4, seller.getBaseSalary());
+            stmt.setInt(5, seller.getDepartment().getId());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if(rowsAffected > 0){
+                try(ResultSet rs = stmt.getGeneratedKeys()){
+                    if(rs.next()){
+                        int id = rs.getInt(1);
+                        System.out.println("New ID: "+ id + " added successfully! " + rowsAffected + " rows Affected");
+
+                    }else{
+                        throw new DbException("Error, no rows affected!");
+                    }
+                }
+            }
+
+        }catch (SQLException e){
+            throw new DbException("Erro ao inserir novo vendedor: " + e.getMessage());
+        }
 
     }
 
@@ -62,7 +84,7 @@ public class SellerDaoJDBC implements SellerDao {
             }
 
         }catch (SQLException e){
-            throw new DbException("Erro ao buscar os dados de SELLER: " + e.getMessage());
+            throw new DbException("Erro ao buscar o id:  " + id +  e.getMessage());
 
         }
     }
