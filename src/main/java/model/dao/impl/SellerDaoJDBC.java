@@ -52,17 +52,18 @@ public class SellerDaoJDBC implements SellerDao {
     }
 
     @Override
-    public void updade(Seller seller) {
+    public void update(Seller seller) {
         String sql = "UPDATE seller " +
                 "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? " +
-                "+ WHERE Id = ?";
+                "WHERE id = ?";
 
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, seller.getName());
             stmt.setString(2, seller.getEmail());
             stmt.setDate(3, Date.valueOf(seller.getBirthDate()));
-            stmt.setInt(4, seller.getDepartment().getId());
-            stmt.setInt(5, seller.getId());
+            stmt.setDouble(4, seller.getBaseSalary());
+            stmt.setInt(5, seller.getDepartment().getId());
+            stmt.setInt(6, seller.getId());
 
             int rowsAffected = stmt.executeUpdate();
 
@@ -71,7 +72,7 @@ public class SellerDaoJDBC implements SellerDao {
             }
 
         }catch (SQLException e){
-            throw new DbException("Error to updade id: " + seller.getId() + e.getMessage() );
+            throw new DbException("Error during update: " + seller.getId() + e.getMessage() );
         }
 
 

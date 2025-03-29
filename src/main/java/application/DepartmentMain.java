@@ -29,7 +29,7 @@ public class DepartmentMain {
         System.out.println("--Update--");
         dep = depDao.findById(1);
         dep.setName("Finance");
-        depDao.updade(dep);
+        depDao.update(dep);
         System.out.println(dep);
 
         System.out.println("--Delete by ID--");

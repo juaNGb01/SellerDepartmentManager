@@ -41,7 +41,7 @@ public class DepartmentDaoJDBC implements DepartmentDao {
     }
 
     @Override
-    public void updade(Department dep) {
+    public void update(Department dep) {
         String sql = "UPDATE seller SET name = ? WHERE  id = ?";
         try(PreparedStatement stmt = conn.prepareStatement(sql)){
 
