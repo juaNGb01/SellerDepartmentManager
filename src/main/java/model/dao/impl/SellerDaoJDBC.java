@@ -22,7 +22,7 @@ public class SellerDaoJDBC implements SellerDao {
     @Override
     public void insert(Seller seller) {
         String sql =  "INSERT INTO seller (Name, Email, BirthDate, BaseSalary, DepartmentId) " +
-                "VALUES (DEFAULT, ? , ? , ?, ? , ?)";
+                "VALUES ( ? , ? , ?, ? , ?)";
 
         try(PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)){
             stmt.setString(1, seller.getName());
@@ -37,27 +37,67 @@ public class SellerDaoJDBC implements SellerDao {
                 try(ResultSet rs = stmt.getGeneratedKeys()){
                     if(rs.next()){
                         int id = rs.getInt(1);
-                        System.out.println("New ID: "+ id + " added successfully! " + rowsAffected + " rows Affected");
+                        System.out.println("New ID "+ id + ", added successfully! " + rowsAffected + " rows Affected");
 
                     }else{
-                        throw new DbException("Error, no rows affected!");
+                        throw new DbException("Unexpected error, no rows affected!");
                     }
                 }
             }
 
         }catch (SQLException e){
-            throw new DbException("Erro ao inserir novo vendedor: " + e.getMessage());
+            throw new DbException("Error inserting new seller: " + e.getMessage());
         }
 
     }
 
     @Override
     public void updade(Seller seller) {
+        String sql = "UPDATE seller " +
+                "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ? " +
+                "+ WHERE Id = ?";
+
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setString(1, seller.getName());
+            stmt.setString(2, seller.getEmail());
+            stmt.setDate(3, Date.valueOf(seller.getBirthDate()));
+            stmt.setInt(4, seller.getDepartment().getId());
+            stmt.setInt(5, seller.getId());
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if(rowsAffected > 0){
+                System.out.println( rowsAffected + " rows affected");
+            }
+
+        }catch (SQLException e){
+            throw new DbException("Error to updade id: " + seller.getId() + e.getMessage() );
+        }
+
 
     }
 
     @Override
     public void deleteById(Integer id) {
+
+        String sql = "DELETE FROM seller WHERE id = ?";
+
+        try(PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1, id);
+
+            int rowsAffected = stmt.executeUpdate();
+
+            if(rowsAffected > 0){
+                System.out.println("Done! " + rowsAffected + " rows affected" );
+
+            }else{
+                throw new DbException("Unexpected error, no rows affected! ");
+            }
+
+
+        }catch (SQLException e){
+            throw new DbException("Error removing ID " + id + e.getMessage() );
+        }
 
     }
 

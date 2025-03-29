@@ -14,11 +14,21 @@ public class Main {
 
         SellerDao sellerDao = DaoFactory.createSellerDao();
 
-        System.out.println("Find by Department: ");
+        System.out.println("Insert: ");
+        Department department = new Department(2, null);
+        Seller newSeller = new Seller(null, "Greg", "greg@gmail.com",LocalDate.now(), 4000.0,
+                department);
+        sellerDao.insert(newSeller);
+
+      /*  System.out.println("Find by Department: ");
         Department dep = new Department(1, null);
         List<Seller> sellersList= sellerDao.findByDepartment(dep);
         for(Seller seller: sellersList){
             System.out.println(seller);
+
         }
+
+        System.out.println("Remove By ID: ");
+        sellerDao.deleteById(10);*/
     }
 }
