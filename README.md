@@ -16,7 +16,7 @@ Maven (para gerenciamento de dependências)
 
 # ⚙️ Configuração do Banco de Dados e Projeto
 
-1. Antes de rodar a aplicação, certifique-se de ter um banco de dados PostgreSQL configurado. Execute comandos presentes na pasta SQL para a criação do mesmo
+1. Antes de rodar a aplicação, certifique-se de ter um banco de dados PostgreSQL configurado. Execute comandos presentes no arquivo database.sql para a criação do mesmo
 2. Configure o banco de dados no arquivo db.properties:
 ```properties
 db.url=jdbc:postgresql://localhost:5432/seu_banco
